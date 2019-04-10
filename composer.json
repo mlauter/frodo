@@ -1,0 +1,31 @@
+{
+    "name": "mlauter/frodo",
+    "type": "project",
+    "version": "0.1.0",
+    "authors": [
+        {
+            "name": "Miriam Lauter",
+            "email": "lauter.miriam@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": { "Frodo\\": "src/" }
+    },
+    "require": {
+        "php": "^7.0",
+        "monolog/monolog": "^1.24"
+    },
+    "autoload-dev": {
+        "psr-4": { "Frodo\\Tests\\": "tests/" }
+    },
+    "require-dev": {
+        "phan/phan": "^1.1",
+        "phpunit/phpunit": "^7.5",
+        "phpunit/php-code-coverage": "^6.1",
+        "squizlabs/php_codesniffer": "^3.4"
+    }
+}

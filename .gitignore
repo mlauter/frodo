@@ -4,3 +4,6 @@ vendor/
 TODO.md
 .DS_Store
 htdocs/tmp/
+data/*
+
+!data/.donotdelete

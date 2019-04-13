@@ -2,7 +2,16 @@
 
 namespace Frodo\Database;
 
-class SQLite {
+use Frodo\Exception\DatabaseException;
+
+class SQLite
+{
+
+    /**
+     * Add consts for error codes as needed
+     * @see https://www.sqlite.org/c3ref/constlist.html
+     */
+    public const SQLITE_CONSTRAINT = 19;
 
     private const PARAM_STR = "?";
 
@@ -12,19 +21,21 @@ class SQLite {
     /** @var \SQLite3 A singleton SQLite3 client */
     private $client;
 
-    public function __construct(string $datafile) {
+    public function __construct(string $datafile)
+    {
         $this->datafile = $datafile;
         // Initialize the db
     }
 
     /**
      * @param string $sql Sql statement with placeholders (e.g. :param)
-     * @param <int, {mixed, int}> $params Array of value, type tuples
+     * @param array<int,array{0:mixed,1:int}> $params Array of value, type tuples
      *
      * @throws \InvalidArgumentException
      * @return array
      */
-    public function executeSingle(string $sql, array $params = []): array {
+    public function executeSingle(string $sql, array $params = []): array
+    {
 
         // No multi-statement passages, can't ensure they're parameterized
         if (preg_match('/;\s*\S/', $sql)) {
@@ -50,20 +61,18 @@ class SQLite {
             }
 
             foreach ($params as $idx => [$val, $type]) {
-
                 // Positional parameters start with 1
                 $stmt->bindValue($idx + 1, $val, $type);
             }
 
             // To improve: error handling
-            $result = $stmt->execute();
+            $result = @$stmt->execute();
         } else {
             $result = $client->query($sql);
         }
 
+        $rows = [];
         if ($result) {
-            $rows = [];
-
             if ($result->numColumns()) {
                 while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
                     $rows[] = $row;
@@ -80,31 +89,47 @@ class SQLite {
     /**
      * Execute multiple parameterized statements in a transaction
      * @param string[] $sqls A list of parameterized sql statements
-     * @param <int,<int,{mixed, int}>> $params An array of param arrays
+     * @param array<int,array<int,array{0:mixed,1:int}>> $params An array of param arrays
      *
      * @throws \Exception
      * @return array
      */
-    public function executeMultiInTxn(array $sqls, array $params): array {
+    public function executeMulti(array $sqls, array $params): array
+    {
 
         if (count($sqls) !== count($params)) {
             throw new \InvalidArgumentException("executeMulti requires a param array per sql statement");
         }
-
-        $client = $this->getClient();
-
-        if (!$client->exec('BEGIN;')) {
-            throw new \RuntimeException("Unable to begin transaction");
-        };
 
         $results = [];
         foreach ($sqls as $idx => $sql) {
             $results[] = $this->executeSingle($sql, $params[$idx]);
         }
 
+        return $results;
+    }
+
+    public function executeMultiNoParams(array $sqls): array
+    {
+        return $this->executeMulti($sqls, array_fill(0, count($sqls), []));
+    }
+
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    public function runInTransaction(callable $fn, array $args = [])
+    {
+        $client = $this->getClient();
+
+        if (!$client->exec('BEGIN;')) {
+            throw new \RuntimeException("Unable to begin transaction");
+        };
+
         try {
+            $results = call_user_func_array($fn, $args);
             if (!$client->exec('COMMIT;')) {
-                throw new \RuntimeException("Unable to commit transaction");
+                $this->throwLastError();
             }
         } catch (\Exception $e) {
             // To improve: rollback could fail too
@@ -115,11 +140,13 @@ class SQLite {
         return $results;
     }
 
-    public function executeMultiInTxnNoParams(array $sqls) {
-        return $this->executeMultiInTxn($sqls, array_fill(0, count($sqls), []));
+    public function lastInsertRowID(): int
+    {
+        return $this->getClient()->lastInsertRowID();
     }
 
-    private function getClient() : \SQLite3 {
+    private function getClient() : \SQLite3
+    {
         if (!isset($this->client)) {
             $this->client = new \SQLite3($this->datafile);
         }
@@ -130,9 +157,10 @@ class SQLite {
     /**
      * @throws \RuntimeException
      */
-    private function throwLastError() : void {
+    private function throwLastError(): void
+    {
         $code = $this->getClient()->lastErrorCode();
         $msg = $this->getClient()->lastErrorMsg();
-        throw new \RuntimeException("Database error: {$msg} ({$code})");
+        throw new DatabaseException("Database error: {$msg} ({$code})", $code);
     }
 }

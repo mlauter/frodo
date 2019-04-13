@@ -100,7 +100,31 @@ class ErrorHandler
         }
 
         if ($backtrace) {
-            $msg .= ' Stack trace: ' . print_r($backtrace, true);
+            $formatted = [];
+            $depth = count($backtrace);
+            $frameno = 0;
+            $args = '';
+            foreach ($backtrace as $frame) {
+                $frameno++;
+
+                $args = !empty($frame['args']) ? print_r($args, true) : '';
+
+                $loc = '';
+                if (isset($frame['file'])) {
+                    $file = $frame['file'];
+                    $line = $frame['line'] ?? 'unknown';
+                    $loc = sprintf("%s:%d", $file, $line);
+                }
+                $formatted[] = sprintf(
+                    "#%d %s(%s) %s",
+                    $depth - $frameno,
+                    $frame['function'] ?? '', // @phan-suppress-current-line PhanTypeArraySuspicious
+                    $args,
+                    $loc
+                );
+            }
+
+            $msg .= ' Stack trace: ' . implode(' ', $formatted);
         }
 
         return $msg;

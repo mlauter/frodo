@@ -2,6 +2,6 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule ^tools/shorten/$       /shorten.php    [L,NC,QSA]
-RewriteRule ^tools/stats/$         /stats.php      [L,NC,QSA]
+RewriteRule ^tools/shorten/?$       /shorten.php    [L,NC,QSA]
+RewriteRule ^tools/stats/?$         /stats.php      [L,NC,QSA]
 RewriteRule ^                      /index.php      [L,NC,QSA]

@@ -60,7 +60,8 @@ class SQLite
                 $this->throwLastError();
             }
 
-            foreach ($params as $idx => [$val, $type]) {
+            foreach ($params as $idx => $tuple) {
+                list($val, $type) = $tuple;
                 if (is_string($val)) {
                     $val = \SQLite3::escapeString($val);
                 }

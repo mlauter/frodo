@@ -26,7 +26,7 @@ chown www-data /var/log/apache2/frodo.log
 # [START php]
 # Install PHP and dependencies from apt
 apt-get update
-apt-get install -y git php7.0 php7.0-xml php-mbstring apache2 apache2-doc apache2-utils libapache2-mod-php7.0 sqlite3
+apt-get install -y git php7.0 php7.0-xml php-mbstring apache2 apache2-doc apache2-utils libapache2-mod-php7.0 sqlite3 php-sqlite3
 
 # Install Composer
 curl -sS https://getcomposer.org/installer | \

@@ -26,7 +26,7 @@ class ShortUrl
             throw new ValidationException(
                 self::PARAM_NAME,
                 ValidationException::ERROR_TOO_SHORT,
-                'must be great than 6 characters long'
+                'must be greater than 6 characters long'
             );
         }
 

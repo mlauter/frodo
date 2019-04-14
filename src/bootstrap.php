@@ -19,7 +19,9 @@ $_SERVER['ENVIRONMENT'] = $env;
 
 require_once __DIR__ . '/../config/' . $config_map[$env];
 
-define('BASE_HREF', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+if (php_sapi_name() !== 'cli') {
+    define('BASE_HREF', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
 
 // TODO Setup monolog logging
 $log_settings = $GLOBALS['server_config']['logger'];

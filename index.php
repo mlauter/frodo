@@ -3,6 +3,7 @@
 require_once __DIR__ . '/src/bootstrap.php';
 
 use Frodo\Validator\ShortUrl;
+use Frodo\Shortener;
 use Frodo\Exception\ValidationException;
 use Frodo\Exception\HTTPException;
 use Frodo\Exception\NotFoundException;
@@ -24,7 +25,7 @@ $short_url = $exploded[1];
 $datafile = $GLOBALS['server_config']['db']['file'];
 
 try {
-    $long_url = (new Frodo\Shortener($datafile))->lengthen($short_url);
+    $long_url = (new Shortener($datafile))->lengthen($short_url);
 } catch (ValidationException $e) {
     throw new HTTPException("Invalid short url", HTTPResponse::HTTP_STATUS_BAD_REQUEST);
 } catch (NotFoundException $e) {

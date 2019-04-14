@@ -42,6 +42,6 @@ class Shortener
 
         (new ShortUrl($short_url))->validate();
 
-        return $this->db->findByShortUrl($short_url);
+        return $this->db->findByShortUrlAndUpdateVisitLog($short_url)['long_url'];
     }
 }

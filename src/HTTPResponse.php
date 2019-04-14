@@ -7,6 +7,7 @@ class HTTPResponse
 
     // Some greatest hits of http statuses
     const HTTP_STATUS_OK = 200;
+    const HTTP_STATUS_REDIRECT = 302;
     const HTTP_STATUS_BAD_REQUEST = 400;
     const HTTP_STATUS_NOT_FOUND = 404;
     const HTTP_STATUS_SERVER_ERROR = 500;
@@ -39,13 +40,13 @@ class HTTPResponse
      *
      * @throws \RuntimeException
      */
-    public function setHeader(string $key, string $val)
+    public function setHeader(string $key, string $val, int $code = 200)
     {
         if (headers_sent()) {
             throw new \RuntimeException("Headers already sent");
         }
 
-        header("$key: $val");
+        header("$key: $val", true, $code);
     }
 
     /** @throws \RuntimeException */
@@ -70,5 +71,10 @@ class HTTPResponse
         }
 
         echo $json;
+    }
+
+    public function redirect(string $loc)
+    {
+        $this->setHeader('Location', $loc, self::HTTP_STATUS_REDIRECT);
     }
 }

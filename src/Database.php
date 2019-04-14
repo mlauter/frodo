@@ -5,6 +5,8 @@ namespace Frodo;
 use Frodo\Database\SQLite;
 use Frodo\Encoder;
 use Frodo\Exception\DatabaseException;
+use Frodo\Exception\NotFoundException;
+use Frodo\Exception\InUseException;
 use \Monolog\Logger;
 use \Monolog\Registry;
 
@@ -121,7 +123,7 @@ class Database
                     "SELECT `short_url` FROM `urls` WHERE `long_url`=? AND `is_autogen`=1;",
                     [[$long_url, \SQLITE3_TEXT]]
                 );
-                $short_url = (string)$res[0]['short_url'] ?? null;
+                $short_url = $res[0]['short_url'] ?? null;
                 if (is_null($short_url)) {
                     $this->logger->error("Unexpected exception retrieving short url for long url {$long_url} after duplicate key exception");
                     throw new \RuntimeException("Unexpected exception retrieving short url");
@@ -137,11 +139,49 @@ class Database
 
     public function createCustomShortUrl(string $long_url, string $short_url): string
     {
-        return '';
+        try {
+            $this->sqlite->executeSingle(
+                "INSERT INTO `urls` (`long_url`, `short_url`, `create_date`) VALUES (?, ?, strftime('%s', 'now'));",
+                [
+                    [$long_url, \SQLITE3_TEXT],
+                    [$short_url, \SQLITE3_TEXT],
+                ]
+            );
+        } catch (DatabaseException $e) {
+            if ($e->getDbErrorCode() === SQLite::SQLITE_CONSTRAINT) {
+                throw new InUseException();
+            }
+            throw $e;
+        }
+
+        return $short_url;
     }
 
     public function findByShortUrl(string $short_url): string
     {
-        return '';
+        $res = $this->sqlite->executeSingle(
+            "SELECT `id`, `long_url` FROM `urls` WHERE `short_url`=?",
+            [[$short_url, \SQLITE3_TEXT]]
+        );
+
+        $long_url = $res[0]['long_url'] ?? null;
+        if (is_null($long_url)) {
+            throw new NotFoundException();
+        }
+
+        // could lose hit count by not running in transaction
+        // but doesn't seem critical for hit count to be exactly
+        // accurate. would be much better to move this write
+        // out of the read path and handle it async
+        try {
+            $this->sqlite->executeSingle(
+                "UPDATE `urls` SET `hits`=`hits`+1 WHERE `id`=?",
+                [[$res[0]['id'], \SQLITE3_INTEGER]]
+            );
+        } catch (\Exception $e) {
+            // ignore
+        }
+
+        return $long_url;
     }
 }

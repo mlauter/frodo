@@ -9,16 +9,13 @@ $parsed = parse_url($_SERVER["REQUEST_URI"]);
 $path = $parsed['path'] ?? '';
 
 switch($path) {
-    case '/':
-        include __DIR__ . '/index.php';
-        break;
-    case '/shorten':
+    case '/tools/shorten':
         include __DIR__ . '/shorten.php';
         break;
-    case '/stats':
+    case '/tools/stats':
         include __DIR__ . '/stats.php';
         break;
     default:
-        echo '404 Not Found';
-        exit(0);
+        include __DIR__ . '/index.php';
+        break;
 }

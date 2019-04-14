@@ -61,6 +61,9 @@ class SQLite
             }
 
             foreach ($params as $idx => [$val, $type]) {
+                if (is_string($val)) {
+                    $val = \SQLite3::escapeString($val);
+                }
                 // Positional parameters start with 1
                 $stmt->bindValue($idx + 1, $val, $type);
             }

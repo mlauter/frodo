@@ -7,7 +7,7 @@ use Frodo\Exception\ValidationException;
 class ShortUrl
 {
 
-    const PARAM_NAME = 'longurl';
+    const PARAM_NAME = 'shorturl';
 
     const PATTERN = '/[a-zA-Z0-9\-]*/';
 
@@ -20,7 +20,7 @@ class ShortUrl
     }
 
     /** @throws ValidationException */
-    public function validate()
+    public function validateCustom()
     {
         if (strlen($this->raw) <= 6) {
             throw new ValidationException(
@@ -38,6 +38,12 @@ class ShortUrl
             );
         }
 
+        $this->validate();
+    }
+
+    /** @throws ValidationException */
+    public function validate()
+    {
         if (preg_match(self::PATTERN, $this->raw) !== 1) {
             throw new ValidationException(
                 self::PARAM_NAME,

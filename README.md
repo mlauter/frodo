@@ -20,7 +20,7 @@ A simple link shortener in php
 
 ### Install dependencies
 
-Frodo depends on php 7.1 or higher and sqlite3.
+Frodo depends on php 7.0 or higher and sqlite3.
 
 Make sure you have an appropriate version of php (check `php -v`), and install sqlite3 using your preferred package manager.
 
@@ -46,13 +46,21 @@ $ php -S localhost:8080 router.php
 #### Make some short urls
 
 ```
-$ curl 'localhost:8080/tools/shorten?longurl=https:/www.google.com/' | jq
+$ curl 'localhost:8080/tools/shorten?longurl=https://www.google.com/' | jq
 {
   "status": 200,
   "response": "http://localhost:8080/b"
 }
 ```
 (Example uses jq - commandline JSON processor to make the output more readable)
+
+```
+$ curl 'localhost:8080/tools/shorten?longurl=https://www.google.com/&shorturl=custom-google' | jq
+{
+  "status": 200,
+  "response": "http://localhost:8080/custom-google"
+}
+```
 
 #### Redirection
 

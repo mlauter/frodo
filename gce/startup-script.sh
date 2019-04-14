@@ -21,7 +21,7 @@ export HOME=/root
 # [START php]
 # Install PHP and dependencies from apt
 apt-get update
-apt-get install -y git php7.1 apache2 apache2-doc apache2-utils libapache2-mod-php7.1 sqlite3
+apt-get install -y git php7.0 apache2 apache2-doc apache2-utils libapache2-mod-php7.0 sqlite3
 
 # Install Composer
 curl -sS https://getcomposer.org/installer | \

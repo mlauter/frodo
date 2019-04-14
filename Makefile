@@ -17,7 +17,7 @@ lint: install-dev
 
 phpunit: install-dev
 	@echo 'Running phpunit...'
-	vendor/bin/phpunit --debug --bootstrap vendor/autoload.php tests/
+	vendor/bin/phpunit --debug -c tests/phpunit.xml
 
 phan: install-dev
 	@echo 'Running phan...'

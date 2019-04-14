@@ -1,0 +1,14 @@
+<phpunit
+    bootstrap="../src/bootstrap.php"
+    colors="true"
+    verbose="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true">
+  <php>
+    <server name="ENVIRONMENT" value="testing"/>
+  </php>
+  <testsuite name="tests">
+    <directory>.</directory>
+  </testsuite>
+</phpunit>

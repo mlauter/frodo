@@ -9,6 +9,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $config_map = [
     'production' => 'prod.php',
     'development' => 'dev.php',
+    'testing' => 'test.php',
 ];
 
 $env = $_SERVER['ENVIRONMENT'] ?? 'development';

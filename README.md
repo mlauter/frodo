@@ -14,15 +14,15 @@ A simple link shortener in php
 * [Install dev dependencies](#install-dev-dependencies)
 * [Discussion and Improvements](#discussion-and-improvements)
 	* [Design choices](#design-choices)
-	* [Improvements](#improvements) 
+	* [Improvements](#improvements)
 
 ## Getting started
 
 ### Install dependencies
 
-Frodo depends on php 7.x and sqlite3.
+Frodo depends on php 7.1 or higher and sqlite3.
 
-Make sure you have an appropriate version of php (check `php -v`), and install sqlite3 using your preferred package manager. 
+Make sure you have an appropriate version of php (check `php -v`), and install sqlite3 using your preferred package manager.
 
 All other dependencies are managed by [composer](https://getcomposer.org/).
 

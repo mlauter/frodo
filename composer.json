@@ -16,7 +16,7 @@
         "psr-4": { "Frodo\\": "src/" }
     },
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "monolog/monolog": "^1.24"
     },
     "autoload-dev": {

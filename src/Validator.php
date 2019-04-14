@@ -13,5 +13,5 @@ interface Validator
     public function __construct($raw, bool $is_required);
 
     /** @throws ValidationException */
-    public function validate();
+    public function validate(): bool;
 }

@@ -9,7 +9,7 @@ class ShortUrl
 
     const PARAM_NAME = 'shorturl';
 
-    const PATTERN = '/[a-zA-Z0-9\-]*/';
+    const PATTERN = '/^[a-zA-Z0-9\-_]+$/';
 
     /** @var string */
     private $raw;
@@ -20,7 +20,7 @@ class ShortUrl
     }
 
     /** @throws ValidationException */
-    public function validateCustom()
+    public function validateCustom(): bool
     {
         if (strlen($this->raw) <= 6) {
             throw new ValidationException(
@@ -38,18 +38,20 @@ class ShortUrl
             );
         }
 
-        $this->validate();
+        return $this->validate();
     }
 
     /** @throws ValidationException */
-    public function validate()
+    public function validate(): bool
     {
         if (preg_match(self::PATTERN, $this->raw) !== 1) {
             throw new ValidationException(
                 self::PARAM_NAME,
                 ValidationException::ERROR_ILLEGAL_CHARS,
-                "must contain only the characters a-z, A-Z, 0-9, and '-'"
+                "must contain only the characters a-z, A-Z, 0-9, and symbols '-_'"
             );
         };
+
+        return true;
     }
 }

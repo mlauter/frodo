@@ -20,7 +20,7 @@ class LongUrl
     /**
      * @throws ValidationException
      */
-    public function validate()
+    public function validate(): bool
     {
         if (empty($this->raw)) {
             throw new ValidationException(
@@ -37,5 +37,7 @@ class LongUrl
                 'not a valid url'
             );
         }
+
+        return true;
     }
 }

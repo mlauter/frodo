@@ -74,10 +74,19 @@ class Database
     /** @var Logger */
     private $logger;
 
-    public function __construct(string $datafile, Encoder $encoder, Logger $logger = null)
-    {
+    public function __construct(
+        string $datafile,
+        Encoder $encoder,
+        Logger $logger = null,
+        SQLite $sqlite = null
+    ) {
+
         $this->encoder = $encoder;
-        $this->sqlite  = new SQLite($datafile);
+
+        if (is_null($sqlite)) {
+            $sqlite  = new SQLite($datafile);
+        }
+        $this->sqlite = $sqlite;
 
         // Initialize the database
         $this->sqlite->runInTransaction(

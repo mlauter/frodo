@@ -6,7 +6,7 @@ class Encoder
 {
 
     // Custom url safe and readable charset
-    const CHARSET = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
+    const CHARSET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
 
     public function encode(int $id): string
     {
@@ -21,6 +21,7 @@ class Encoder
             $remainder = $id % $n;
             $quotient = intdiv($id, $n);
             $encoded = self::CHARSET[$remainder] . $encoded;
+
             $id = $quotient;
         }
 

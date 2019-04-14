@@ -1,4 +1,2 @@
 # Google credentials and configuration
-google_client_id:      CLIENT_ID
-google_client_secret:  CLIENT_SECRET
 google_project_id:     frodo-237615

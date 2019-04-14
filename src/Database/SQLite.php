@@ -11,9 +11,9 @@ class SQLite
      * Add consts for error codes as needed
      * @see https://www.sqlite.org/c3ref/constlist.html
      */
-    public const SQLITE_CONSTRAINT = 19;
+    const SQLITE_CONSTRAINT = 19;
 
-    private const PARAM_STR = "?";
+    const PARAM_STR = "?";
 
     /** @var string SQLite database file*/
     private $datafile;

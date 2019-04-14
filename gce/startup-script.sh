@@ -18,6 +18,11 @@
 set -e
 export HOME=/root
 
+mkdir -p /var/log/apache2
+chmod a+x /var/log/apache2
+touch /var/log/apache2/frodo.log
+chown www-data /var/log/apache2/frodo.log
+
 # [START php]
 # Install PHP and dependencies from apt
 apt-get update
@@ -49,13 +54,13 @@ curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/
 # [END project_config]
 
 # [START apache]
-sudo a2dismod mpm_event
-sudo a2enmod mpm_prefork
-sudo a2dissite 000-default.conf
+/usr/sbin/a2dismod mpm_event
+/usr/sbin/a2enmod mpm_prefork
+/usr/sbin/a2dissite 000-default.conf
 
 # Enable our apache configuration
-cp /var/www/frodo/gce/apache/frodo.com.conf /etc/apache2/sites-available/
-sudo a2ensite frodo.com.conf
+cp /var/www/frodo/gce/frodo.com.conf /etc/apache2/sites-available/
+/usr/sbin/a2ensite frodo.com.conf
 
 systemctl restart apache2
 # [END apache]

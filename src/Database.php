@@ -47,7 +47,7 @@ class Database
      * published back to the prod db at regular intervals to power
      * the stats page.
      */
-    private const INIT_SQL = [
+    const INIT_SQL = [
         "CREATE TABLE IF NOT EXISTS `urls` (
             `id` INTEGER PRIMARY KEY AUTOINCREMENT,
             `long_url` text NOT NULL,

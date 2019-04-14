@@ -4,6 +4,7 @@ vendor/
 TODO.md
 .DS_Store
 htdocs/tmp/
+composer.lock
 data/*
 
 !data/.donotdelete

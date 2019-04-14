@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-require_once __DIR__ . '/src/bootstrap.php';
+require_once dirname(__DIR__) . '/src/bootstrap.php';
 
 use Frodo\Validator\ShortUrl;
 use Frodo\Shortener;
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     throw new HTTPException("Not found", HTTPResponse::HTTP_STATUS_NOT_FOUND);
 }
 
-$path = $_SERVER['PATH_INFO'];
+$path = parse_url($_SERVER['REQUEST_URI'])['path'];
 $exploded = explode("/", $path);
 if (count($exploded) > 2) {
     throw new HTTPException("Not found", HTTPResponse::HTTP_STATUS_NOT_FOUND);

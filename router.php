@@ -10,12 +10,12 @@ $path = $parsed['path'] ?? '';
 
 switch($path) {
     case '/tools/shorten':
-        include __DIR__ . '/shorten.php';
+        include __DIR__ . '/htdocs/shorten.php';
         break;
     case '/tools/stats':
-        include __DIR__ . '/stats.php';
+        include __DIR__ . '/htdocs/stats.php';
         break;
     default:
-        include __DIR__ . '/index.php';
+        include __DIR__ . '/htdocs/index.php';
         break;
 }

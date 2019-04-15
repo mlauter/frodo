@@ -4,4 +4,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule ^tools/shorten/?$       /shorten.php    [L,NC,QSA]
 RewriteRule ^tools/stats/?$         /stats.php      [L,NC,QSA]
-RewriteRule ^                      /index.php      [L,NC,QSA]
+RewriteRule ^([a-zA-Z0-9\-_]+)/?$   /index.php      [L,NC,QSA]

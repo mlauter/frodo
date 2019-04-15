@@ -43,6 +43,8 @@ rm -r /var/www/*
 git config --global credential.helper gcloud.sh
 git clone https://source.developers.google.com/p/$PROJECTID/r/$REPO_NAME /var/www/frodo -b master
 
+chown www-data /var/www/frodo/data
+
 # Run Composer
 composer install -d /var/www/frodo --no-ansi --no-progress
 # [END php]
